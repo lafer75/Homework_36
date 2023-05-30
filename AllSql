@@ -1,0 +1,63 @@
+ CREATE TABLE IF NOT EXISTS "black_list"(
+    "id" SERIAL NOT NULL,
+    "domain" VARCHAR(50) NOT NULL,
+    "created_at" BIGINT NOT NULL,
+    CONSTRAINT black_list_pkey PRIMARY KEY (id));
+
+INSERT INTO "black_list" ("domain", created_at)
+       VALUES ('mail.ru', 1032518165000),
+       ('yandex.ru', 1355988061000),
+       ('vk.ru', 1494180594000);
+
+CREATE TABLE IF NOT EXISTS "categories"(
+        "id"         SERIAL      NOT NULL,
+        "name"       VARCHAR(30) NOT NULL,
+        "created_at" BIGINT      NOT NULL,
+        CONSTRAINT "categoies_pkey" PRIMARY KEY (id));
+
+INSERT INTO "categories" ("name", created_at)
+        VALUES ('news', 1179126700000),
+        ('shop', 876146673000),
+        ('leaders', 432796051000);
+
+CREATE TABLE IF NOT EXISTS "links"(
+        "id" SERIAL,
+        "name" VARCHAR(50) NOT NULL ,
+        "value" VARCHAR(100) NOT NULL ,
+        "category_id" INT NOT NULL ,
+        "created_at" BIGINT NOT NULL,
+        CONSTRAINT "links_pkey" PRIMARY KEY ("id"),
+        CONSTRAINT "links_category_id_uk" FOREIGN KEY ("category_id") REFERENCES "categories"("id"));
+
+INSERT INTO "links" ("name", "value", "category_id", "created_at")
+        VALUES ('Google', 'https://www.google.com', 1, 972468050000),
+        ('Gmail', 'https://mail.google.com/', 1, 972640850000),
+        ('Binance', 'https://www.binance.com/', 2, 975319250000),
+        ('Github', 'https://github.com/', 3, 977911250000);
+
+CREATE TABLE IF NOT EXISTS "tags"(
+        "id"         SERIAL      NOT NULL,
+        "name"       VARCHAR(30) NOT NULL,
+        "created_at" BIGINT      NOT NULL,
+        CONSTRAINT tags_pkey PRIMARY KEY (id));
+
+INSERT INTO "tags" ("name", created_at)
+        VALUES ('Google', 972468050000),
+        ('Gmail', 972640850000),
+        ('Binance', 975319250000),
+        ('Github', 977911250000);
+
+CREATE TABLE IF NOT EXISTS "links_tags"(
+       "link_id" INT NOT NULL,
+        "tag_id" INT NOT NULL,
+        PRIMARY KEY (link_id, tag_id),
+        CONSTRAINT "links_tags_links_id_fk" FOREIGN KEY ("link_id") REFERENCES "links" ("id"),
+        CONSTRAINT "links_tags_tags_id_fk" FOREIGN KEY ("tag_id") REFERENCES "tags" ("id"));
+
+INSERT INTO "links_tags" ("link_id", "tag_id")
+        VALUES (1,1),
+        (2,2),
+        (3,3),
+        (4,4);
+
+SELECT*FROM "links_tags";
